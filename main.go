@@ -16,7 +16,6 @@ import (
 
 	"github.com/libp2p/go-libp2p"
 	"github.com/libp2p/go-libp2p/core/host"
-	"github.com/libp2p/go-libp2p/core/network"
 	"github.com/libp2p/go-libp2p/core/peer"
 	"github.com/multiformats/go-multiaddr"
 	"github.com/wailsapp/wails/v2"
@@ -28,7 +27,7 @@ import (
 //go:embed all:frontend/dist
 var assets embed.FS
 
-const RELAY_ADDR = "/ip4/178.72.155.3/tcp/37745/p2p/QmfH8qgARV5ANE5LjpPo9YujKgdabtfgL4uuWneKxv7pYd"
+const RELAY_ADDR = "/ip4/178.72.155.3/tcp/34733/p2p/QmatitH6eu5zcVRe3mQ4KWkCf9jKdAPZSiRxSJox5Qu9DL"
 const RegisterFileProtocolID = "/register_file/1.0.0"
 const FilesForSaleProtocolID = "/files_for_sale/1.0.0"
 const FileWaitSignal = "/waitForSignalToTransmitFile/1.0.0"
@@ -96,33 +95,27 @@ func getStablePeerId(h host.Host) {
 	if err != nil {
 		log.Fatal(err)
 	}
-
-	s, err := h.NewStream(context.Background(), stablePeerId.ID, FileWaitSignal)
-	if err != nil {
-		log.Println(err)
-	}
-
-	go waitingForTransmition(s, h)
 }
 
-func waitingForTransmition(s network.Stream, h host.Host) {
-	defer s.Close()
-	decoder := json.NewDecoder(s)
-	var fileId string
+func writeFileStream(h host.Host) {
+	s, err := h.NewStream(context.Background(), stablePeerId.ID, transmitProtocolID)
 
 	for {
-		err := decoder.Decode(&fileId)
-		if err != nil {
-			log.Println(err)
-			break
-		}
+		buf := make([]byte, 2)
+		s.Read(buf)
 
-		newStream, err := h.NewStream(context.Background(), stablePeerId.ID)
-		writer := bufio.NewWriter(newStream)
+		if err != nil {
+			fmt.Println("Ошибка открытия стрима: ", err)
+			continue
+		}
+		defer s.Close()
+
+		writer := bufio.NewWriter(s)
 
 		file, err := os.Open(mySale.Path)
 		if err != nil {
 			fmt.Println("Ошибка открытия файла: ", err)
+			file.Close()
 			continue
 		}
 
@@ -130,7 +123,6 @@ func waitingForTransmition(s network.Stream, h host.Host) {
 		if err != nil {
 			fmt.Println("Ошибка получения размера: ", err)
 			file.Close()
-			newStream.Close()
 			continue
 		}
 
@@ -139,22 +131,19 @@ func waitingForTransmition(s network.Stream, h host.Host) {
 
 		writer.WriteString(filename + "\n")
 		writer.WriteString(fmt.Sprintf("%d\n", filesize))
-
 		writer.Flush()
 
 		_, err = io.CopyN(writer, file, filesize)
 		if err != nil {
 			fmt.Println("Ошибка отправки файла: ", err)
 			file.Close()
-			newStream.Close()
 			continue
 		}
 
 		writer.Flush()
 		file.Close()
 
-		fmt.Println("Файл отправлен:", filename)
-		newStream.Close()
+		fmt.Println("Файл отправлен: ", filename)
 	}
 }
 
@@ -232,6 +221,8 @@ func (a *App) UploadFile() (*FileInfo, error) {
 	s.Read(buf)
 	fmt.Printf("Response: %s\n", string(buf))
 
+	go writeFileStream(a.host)
+
 	mySale = FileInfo{
 		Name:          fileInfo.Name(),
 		Size:          fileInfo.Size(),
@@ -268,15 +259,15 @@ func (a *App) GetMyName() string {
 }
 
 func (a *App) BuyFile() {
-	s, err := a.host.NewStream(context.Background(), stablePeerId.ID, BuyFileProtocolID)
-	defer s.Close()
+	// s, err := a.host.NewStream(context.Background(), stablePeerId.ID, BuyFileProtocolID)
+	// defer s.Close()
 
-	if err != nil {
-		log.Println(err)
-		return
-	}
+	// if err != nil {
+	// 	log.Println(err)
+	// 	return
+	// }
 
-	s.Write([]byte("BuyFile"))
+	// s.Write([]byte("BuyFile"))
 
 	newStream, err := a.host.NewStream(context.Background(), stablePeerId.ID, transmitProtocolID)
 	if err != nil {
@@ -284,7 +275,9 @@ func (a *App) BuyFile() {
 	}
 
 	defer newStream.Close()
-	reader := bufio.NewReader(s)
+
+	newStream.Write([]byte("GO"))
+	reader := bufio.NewReader(newStream)
 
 	filename, err := reader.ReadString('\n')
 	if err != nil {
