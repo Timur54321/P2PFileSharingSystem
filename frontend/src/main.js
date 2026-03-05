@@ -28,7 +28,14 @@ const initClient = async function() {
     
     document.querySelector("#whatsforsale").addEventListener("click", getAndShowFilesForSale);
     document.querySelector("#buyFile").addEventListener("click", async () => {
+        document.querySelector("#gettingFileStatus").textContent = "Получаю файл... 🙄🙄 (прогресс бара пока что нет 😡😠😠)";
         const result = await window.go.main.App.BuyFile();
+
+        if (result == "success") {
+            document.querySelector("#gettingFileStatus").textContent = "Ну типа получил файл и че дальше то? 🥱🥱 (Проверь наличие файла в текущей директории может быть 🤔)";
+        } else {
+            document.querySelector("#gettingFileStatus").textContent = "Что-то пошло не по плану 😝😜😝";
+        }
     });
 }
 
@@ -43,7 +50,7 @@ const getAndShowFilesForSale = async function() {
                     <h3>${element.filename}</h3>
                 </div>
                 <div>
-                    <h3>${element.sizeFormatted}</h3>
+                    <h3>${element.size_formatted}</h3>
                 </div>
                 <div>
                     <h3>${element.fileID}</h3>

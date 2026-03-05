@@ -27,7 +27,7 @@ import (
 //go:embed all:frontend/dist
 var assets embed.FS
 
-const RELAY_ADDR = "/ip4/178.72.155.3/tcp/34733/p2p/QmatitH6eu5zcVRe3mQ4KWkCf9jKdAPZSiRxSJox5Qu9DL"
+const RELAY_ADDR = "/ip4/178.72.155.3/tcp/42379/p2p/QmXQQR5h3eTrPBtg5GDhZPAEuLW2pqz8FXmQzRsRNWMRYj"
 const RegisterFileProtocolID = "/register_file/1.0.0"
 const FilesForSaleProtocolID = "/files_for_sale/1.0.0"
 const FileWaitSignal = "/waitForSignalToTransmitFile/1.0.0"
@@ -258,7 +258,7 @@ func (a *App) GetMyName() string {
 	return a.host.ID().String()
 }
 
-func (a *App) BuyFile() {
+func (a *App) BuyFile() string {
 	// s, err := a.host.NewStream(context.Background(), stablePeerId.ID, BuyFileProtocolID)
 	// defer s.Close()
 
@@ -282,39 +282,40 @@ func (a *App) BuyFile() {
 	filename, err := reader.ReadString('\n')
 	if err != nil {
 		fmt.Println("Ошибка чтения имени файла: ", err)
-		return
+		return "error"
 	}
 	filename = strings.TrimSpace(filename)
 
 	sizeStr, err := reader.ReadString('\n')
 	if err != nil {
 		fmt.Println("Ошибка чтения размера: ", err)
-		return
+		return "error"
 	}
 	sizeStr = strings.TrimSpace(sizeStr)
 
 	filesize, err := strconv.ParseInt(sizeStr, 10, 64)
 	if err != nil {
 		fmt.Println("Ошибка парсинга размера: ", err)
-		return
+		return "error"
 	}
 
 	out, err := os.Create("received_" + filename)
 	if err != nil {
 		fmt.Println("Ошибка создания файла: ", err)
-		return
+		return "error"
 	}
 
 	_, err = io.CopyN(out, reader, filesize)
 	if err != nil {
 		fmt.Println("Ошибка при получения файла: ", err)
 		out.Close()
-		return
+		return "error"
 	}
 
 	out.Close()
 
 	fmt.Println("\nФайл получен:", filename)
+	return "success"
 }
 
 func formatFileSize(size int64) string {
