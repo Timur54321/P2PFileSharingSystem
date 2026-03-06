@@ -33,14 +33,7 @@ const initClient = async function() {
 }
 
 async function purchaseFile() {
-    document.querySelector("#gettingFileStatus").textContent = "Получаю файл... 🙄🙄 (прогресс бара пока что нет 😡😠😠)";
-    const result = await window.go.main.App.BuyFile();
-
-    if (result == "success") {
-        document.querySelector("#gettingFileStatus").textContent = "Ну типа получил файл и че дальше то? 🥱🥱 (Проверь наличие файла в текущей директории может быть 🤔)";
-    } else {
-        document.querySelector("#gettingFileStatus").textContent = "Что-то пошло не по плану 😝😜😝";
-    }
+    
 }
 
 const getAndShowFilesForSale = async function() {
@@ -69,12 +62,17 @@ const getAndShowFilesForSale = async function() {
         )
     });
 
-    document.querySelectorAll(".market_file").forEach(el => {
-        el.removeEventListener("click", purchaseFile);
-    });
+   
 
-    document.querySelectorAll(".market_file").forEach(el => {
-        el.addEventListener("click", purchaseFile);
+    document.querySelectorAll(".market_file").forEach(async function(ev) {
+        document.querySelector("#gettingFileStatus").textContent = "Получаю файл... 🙄🙄 (прогресс бара пока что нет 😡😠😠)";
+        const result = await window.go.main.App.BuyFile(this.dataset.owner, this.dataset.fileid);
+
+        if (result == "success") {
+            document.querySelector("#gettingFileStatus").textContent = "Ну типа получил файл и че дальше то? 🥱🥱 (Проверь наличие файла в текущей директории может быть 🤔)";
+        } else {
+            document.querySelector("#gettingFileStatus").textContent = "Что-то пошло не по плану 😝😜😝";
+        }
     });
 }
 
