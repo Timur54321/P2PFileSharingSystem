@@ -209,6 +209,8 @@ func (a *App) UploadFile() (*FileInfo, error) {
 		OwnerID:       a.host.ID().String(),
 	}
 
+	fmt.Println(data.OwnerID)
+
 	s, err := a.host.NewStream(context.Background(), stablePeerId.ID, RegisterFileProtocolID)
 	if err != nil {
 		log.Println(err)
@@ -216,7 +218,6 @@ func (a *App) UploadFile() (*FileInfo, error) {
 	}
 	defer s.Close()
 
-	fmt.Println("SOmething supposed to happen")
 	encoder := json.NewEncoder(s)
 	err = encoder.Encode(data)
 	if err != nil {

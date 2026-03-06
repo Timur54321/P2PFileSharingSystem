@@ -28,20 +28,25 @@ const initClient = async function() {
     
     document.querySelector("#whatsforsale").addEventListener("click", getAndShowFilesForSale);
     document.querySelector("#buyFile").addEventListener("click", async () => {
-        document.querySelector("#gettingFileStatus").textContent = "Получаю файл... 🙄🙄 (прогресс бара пока что нет 😡😠😠)";
-        const result = await window.go.main.App.BuyFile();
-
-        if (result == "success") {
-            document.querySelector("#gettingFileStatus").textContent = "Ну типа получил файл и че дальше то? 🥱🥱 (Проверь наличие файла в текущей директории может быть 🤔)";
-        } else {
-            document.querySelector("#gettingFileStatus").textContent = "Что-то пошло не по плану 😝😜😝";
-        }
+        
     });
+}
+
+async function purchaseFile() {
+    document.querySelector("#gettingFileStatus").textContent = "Получаю файл... 🙄🙄 (прогресс бара пока что нет 😡😠😠)";
+    const result = await window.go.main.App.BuyFile();
+
+    if (result == "success") {
+        document.querySelector("#gettingFileStatus").textContent = "Ну типа получил файл и че дальше то? 🥱🥱 (Проверь наличие файла в текущей директории может быть 🤔)";
+    } else {
+        document.querySelector("#gettingFileStatus").textContent = "Что-то пошло не по плану 😝😜😝";
+    }
 }
 
 const getAndShowFilesForSale = async function() {
     const files = await window.go.main.App.GetFilesForSale();
 
+    document.querySelector(".files_for_sale_block").innerHTML = "";
     files.forEach(element => {
         document.querySelector(".files_for_sale_block").insertAdjacentHTML('beforeend', 
             `
@@ -64,13 +69,13 @@ const getAndShowFilesForSale = async function() {
         )
     });
 
-    document.querySelector(".market_file").addEventListener("click", async function(event) {
-        console.log(this);
-        console.log(this.dataset.owner);
-        console.log(this.dataset.fileid);
+    document.querySelectorAll(".market_file").forEach(el => {
+        el.removeEventListener("click", purchaseFile);
+    });
 
-        const result = await window.go.main.App.BuyFile(this.dataset.owner, this.dataset.fileid);
-    })
+    document.querySelectorAll(".market_file").forEach(el => {
+        el.addEventListener("click", purchaseFile);
+    });
 }
 
 window.addEventListener("load", initClient)
