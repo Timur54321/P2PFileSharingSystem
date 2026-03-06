@@ -23,6 +23,7 @@ export namespace main {
 	    filename: string;
 	    size: number;
 	    size_formatted: string;
+	    owner_id: string;
 	
 	    static createFrom(source: any = {}) {
 	        return new RegisteredFile(source);
@@ -34,6 +35,7 @@ export namespace main {
 	        this.filename = source["filename"];
 	        this.size = source["size"];
 	        this.size_formatted = source["size_formatted"];
+	        this.owner_id = source["owner_id"];
 	    }
 	}
 

@@ -17,6 +17,7 @@ import (
 	"github.com/libp2p/go-libp2p"
 	"github.com/libp2p/go-libp2p/core/host"
 	"github.com/libp2p/go-libp2p/core/peer"
+	"github.com/libp2p/go-libp2p/core/protocol"
 	"github.com/multiformats/go-multiaddr"
 	"github.com/wailsapp/wails/v2"
 	"github.com/wailsapp/wails/v2/pkg/options"
@@ -27,12 +28,12 @@ import (
 //go:embed all:frontend/dist
 var assets embed.FS
 
-const RELAY_ADDR = "/ip4/178.72.155.3/tcp/42379/p2p/QmXQQR5h3eTrPBtg5GDhZPAEuLW2pqz8FXmQzRsRNWMRYj"
+const RELAY_ADDR = "/ip4/178.72.155.3/tcp/9000/p2p/12D3KooWSUkyGUh41ayNYx5y3suw5x9VXPV2rEr5Ae2MokmowDuF"
 const RegisterFileProtocolID = "/register_file/1.0.0"
 const FilesForSaleProtocolID = "/files_for_sale/1.0.0"
 const FileWaitSignal = "/waitForSignalToTransmitFile/1.0.0"
 const BuyFileProtocolID = "/buyFile/1.0.0"
-const transmitProtocolID = "/transmitFile/1.0.0"
+const transmitProtocolID = "/transmitFile"
 
 var stablePeerId *peer.AddrInfo
 var mySale FileInfo
@@ -42,6 +43,7 @@ type RegisteredFile struct {
 	Name          string `json:"filename"`
 	Size          int64  `json:"size"`
 	SizeFormatted string `json:"size_formatted"`
+	OwnerID       string `json:"owner_id"`
 }
 
 type FileInfo struct {
@@ -97,22 +99,24 @@ func getStablePeerId(h host.Host) {
 	}
 }
 
-func writeFileStream(h host.Host) {
-	s, err := h.NewStream(context.Background(), stablePeerId.ID, transmitProtocolID)
+func writeFileStream(h host.Host, fileID, filePath string) {
 
 	for {
+		protocolName := fmt.Sprintf("%s/%s/owner/%s/1.0.0", transmitProtocolID, fileID, "none")
+		s, err := h.NewStream(context.Background(), stablePeerId.ID, protocol.ID(protocolName))
+
 		buf := make([]byte, 2)
 		s.Read(buf)
 
 		if err != nil {
 			fmt.Println("Ошибка открытия стрима: ", err)
-			continue
+			break
 		}
 		defer s.Close()
 
 		writer := bufio.NewWriter(s)
 
-		file, err := os.Open(mySale.Path)
+		file, err := os.Open(filePath)
 		if err != nil {
 			fmt.Println("Ошибка открытия файла: ", err)
 			file.Close()
@@ -126,7 +130,7 @@ func writeFileStream(h host.Host) {
 			continue
 		}
 
-		filename := filepath.Base(mySale.Path)
+		filename := filepath.Base(filePath)
 		filesize := info.Size()
 
 		writer.WriteString(filename + "\n")
@@ -137,13 +141,14 @@ func writeFileStream(h host.Host) {
 		if err != nil {
 			fmt.Println("Ошибка отправки файла: ", err)
 			file.Close()
-			continue
+			break
 		}
 
 		writer.Flush()
 		file.Close()
 
 		fmt.Println("Файл отправлен: ", filename)
+		s.Close()
 	}
 }
 
@@ -201,6 +206,7 @@ func (a *App) UploadFile() (*FileInfo, error) {
 		Name:          fileInfo.Name(),
 		Size:          fileInfo.Size(),
 		SizeFormatted: formatFileSize(fileInfo.Size()),
+		OwnerID:       a.host.ID().String(),
 	}
 
 	s, err := a.host.NewStream(context.Background(), stablePeerId.ID, RegisterFileProtocolID)
@@ -221,7 +227,7 @@ func (a *App) UploadFile() (*FileInfo, error) {
 	s.Read(buf)
 	fmt.Printf("Response: %s\n", string(buf))
 
-	go writeFileStream(a.host)
+	go writeFileStream(a.host, fileId, absPath)
 
 	mySale = FileInfo{
 		Name:          fileInfo.Name(),
@@ -258,18 +264,17 @@ func (a *App) GetMyName() string {
 	return a.host.ID().String()
 }
 
-func (a *App) BuyFile() string {
-	// s, err := a.host.NewStream(context.Background(), stablePeerId.ID, BuyFileProtocolID)
-	// defer s.Close()
-
-	// if err != nil {
-	// 	log.Println(err)
-	// 	return
-	// }
-
-	// s.Write([]byte("BuyFile"))
-
-	newStream, err := a.host.NewStream(context.Background(), stablePeerId.ID, transmitProtocolID)
+func (a *App) BuyFile(ownerID, fileID string) string {
+	newStream, err := a.host.NewStream(
+		context.Background(),
+		stablePeerId.ID,
+		protocol.ID(
+			fmt.Sprintf("%s/%s/owner/%s/1.0.0",
+				transmitProtocolID,
+				fileID,
+				ownerID,
+			)),
+	)
 	if err != nil {
 		log.Println(err)
 	}

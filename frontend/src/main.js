@@ -45,7 +45,7 @@ const getAndShowFilesForSale = async function() {
     files.forEach(element => {
         document.querySelector(".files_for_sale_block").insertAdjacentHTML('beforeend', 
             `
-            <div class="file_block">
+            <div class="file_block market_file" data-fileid="${element.fileID}" data-owner="${element.owner_id}">
                 <div>
                     <h3>${element.filename}</h3>
                 </div>
@@ -63,6 +63,14 @@ const getAndShowFilesForSale = async function() {
             `
         )
     });
+
+    document.querySelector(".market_file").addEventListener("click", async function(event) {
+        console.log(this);
+        console.log(this.dataset.owner);
+        console.log(this.dataset.fileid);
+
+        const result = await window.go.main.App.BuyFile(this.dataset.owner, this.dataset.fileid);
+    })
 }
 
 window.addEventListener("load", initClient)
