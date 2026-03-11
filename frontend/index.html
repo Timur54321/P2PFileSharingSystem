@@ -3,23 +3,194 @@
 <head>
     <meta charset="UTF-8"/>
     <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:ital,wght@0,100..700;1,100..700&display=swap" rel="stylesheet">
     <title>fileSharingSystem</title>
 </head>
 <body>
     <main>
-        <section class="files_box">
-            <h2 class="initials">I am <span id="iam"></span></h2>
-            <button id="chooseForSale">Выставить на продажу (НЕ НАЖИМАТЬ!)</button>
-            <h2 class="myFilesTitle title">Мои файлы на продажу</h2>
-        </section>
-        <section>
-            <button id="whatsforsale">Че там на продажу</button>
-        </section>
-        <section class="files_for_sale_block">
+        <section class="leftSection">
+            <div class="mainCorner"></div>
+            <div class="publicNodeBox">
+                <h1 class="publicNodeTitle kindaWhite smallTitle">Публичный узел</h1>
+                <div class="becomePublicNodeBtn">
+                    <img src="./src/assets/images/society.png" alt="" class="iconSize whiteImage">
+                    <p class="publicNodeBtnText regularText">Стать публичным узлом</p>
+                </div>
+            </div>
+
+            <div class="filesMenuBox">
+                <h1 class="filesMenuTitle kindaWhite smallTitle">Файлы</h1>
+                <div class="fileMenuItem">
+                    <img src="./src/assets/images/next.png" alt="" class="whiteImage iconSize">
+                    <img src="./src/assets/images/cloud-computing.png" alt="" class="whiteImage iconSize">
+                    <p class="fileItemText regularText notReallyWhite" id="myFiles">Мои файлы</p>
+                </div>
+
+                <div class="fileMenuItem">
+                    <img src="./src/assets/images/next.png" alt="" class="whiteImage iconSize">
+                    <img src="./src/assets/images/recent.png" alt="" class="whiteImage iconSize">
+                    <p class="fileItemText regularText notReallyWhite">Недавние</p>
+                </div>
+
+                <div class="fileMenuItem">
+                    <img src="./src/assets/images/next.png" alt="" class="whiteImage iconSize">
+                    <img src="./src/assets/images/networking.png" alt="" class="whiteImage iconSize">
+                    <p class="fileItemText regularText notReallyWhite" id="fileNetwork">Файловая сеть</p>
+                </div>
+            </div>
+
+            <div class="teamsMenuBox">
+                <h1 class="teamsMenuTitle kindaWhite smallTitle">Команды</h1>
+
+                <div class="teamMenuItem">
+                    <img src="./src/assets/images/next.png" alt="" class="whiteImage iconSize">
+                    <div class="teamIcon"></div>
+                    <p class="teamName regularText notReallyWhite">Вселяющие жалость</p>
+                </div>
+
+                <div class="teamMenuItem">
+                    <img src="./src/assets/images/next.png" alt="" class="whiteImage iconSize">
+                    <div class="teamIcon"></div>
+                    <p class="teamName regularText notReallyWhite">Беспо Мощный</p>
+                </div>
+            </div>
+
+            <div class="storageBox">
+                <div class="storageInfoBox">
+                    <img src="./src/assets/images/database-table.png" alt="" class="whiteImage iconSize">
+                    <h1 class="kindaWhite smallTitle">Хранилище</h1>
+                    <p class="regularText" style="margin-left: auto;">78%</p>
+                </div>
+                <div class="storageProgressBox">
+                    <div class="storageProgressBar">
+                        <div class="storageProgress"></div>
+                    </div>
+                </div>
+            </div>
 
         </section>
-        <section>
-            <h4 id="gettingFileStatus"></h4>
+        <section class="rightSection">
+            <div class="topSection">
+                <div class="appNameBox">
+                    <h1 class="appName">Files Manager</h1>
+                </div>
+                <div class="inputBox">
+                    <img src="./src/assets/images/magnifying-glass.png" alt="" class="notReallyWhiteImage" style="width: 2.3rem;">
+                    <input type="text" class="searchFileInput" placeholder="Искать файл...">
+                    <p class="regularText" style="color: rgb(179, 179, 179); margin-left: auto;">Alt + K</p>
+                </div>
+                <div class="userInfoBox">
+                    <div class="profileImageBox">
+                        <img src="./src/assets/images/4a1d69404b58e220d936d5086b34b7c4.jpg" alt="" class="profileImage">
+                    </div>
+                </div>
+            </div>
+            <div class="mainSection">
+                <div class="optionsBox">
+                    <div class="currentPageTitle">
+                        <img src="./src/assets/images/main-menu.png" alt="" class="iconSize whiteImage">
+                        <h1 class="kindaWhite smallTitle">Главная</h1>
+                    </div>
+                    <div class="optionButtons">
+                        <div class="optionBtn">
+                            <img src="./src/assets/images/arrange.png" alt="" class="iconSize whiteImage">
+                            <p class="regularText">Фильтры</p>
+                        </div>
+                        <div class="optionBtn">
+                            <img src="./src/assets/images/view-list.png" alt="" class="iconSize whiteImage">
+                            <p class="regularText">Вид</p>
+                        </div>
+                        <div class="optionBtn mainOption">
+                            <img src="./src/assets/images/more.png" alt="" class="iconSize whiteImage">
+                            <p class="regularText" id="createFile">Создать</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="previewTeamsBox">
+                    <h1 class="teamsPreviewTitle kindaWhite smallTitle">Команды</h1>
+                    <div class="teamListBox">
+                        <div class="teamPreviewItem">
+                            <div class="teamPreviewIcon"></div>
+                            <div class="teamPreviewInfoBox">
+                                <h1 class="regularText">Вселяющие жалость</h1>
+                                <div style="display: flex; align-items: center; margin-top: 0.5rem;">
+                                    <img src="./src/assets/images/user.png" alt="" class="notReallyWhiteImage" style="width: 2rem; margin-right: 0.5rem;">
+                                    <p class="regularText">4</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="teamPreviewItem">
+                            <div class="teamPreviewIcon"></div>
+                            <div class="teamPreviewInfoBox">
+                                <h1 class="regularText">Беспо Мощный</h1>
+                                <div style="display: flex; align-items: center; margin-top: 0.5rem;">
+                                    <img src="./src/assets/images/user.png" alt="" class="notReallyWhiteImage" style="width: 2rem; margin-right: 0.5rem;">
+                                    <p class="regularText">4</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="filesBox">
+                    <h1 class="filesTitle kindaWhite smallTitle">Файлы</h1>
+                    <div class="filesNavBox">
+                        <div></div>
+                        <div class="fileNavItem">
+                            <h1 class="fileNavName regularText">Имя</h1>
+                            <img src="./src/assets/images/arrange.png" alt="" class="whiteImage iconSize">
+                        </div>
+                        <div class="fileNavItem">
+                            <h1 class="fileNavName regularText">Размер</h1>
+                            <img src="./src/assets/images/arrange.png" alt="" class="whiteImage iconSize">
+                        </div>
+                        <div class="fileNavItem">
+                            <h1 class="fileNavName regularText">Статус</h1>
+                            <img src="./src/assets/images/arrange.png" alt="" class="whiteImage iconSize">
+                        </div>
+                        <div class="fileNavItem">
+                            <h1 class="fileNavName regularText">ID</h1>
+                        </div>
+                        <div></div>
+                    </div>
+                    <div class="filesListBox">
+                        <div class="fileListItem">
+                            <img src="./src/assets/images/imageType.png" alt="" class="iconSize">
+                            <div>
+                                <h1 class="regularText fileListName">cool picture.jpg</h1>
+                                <div style="display: flex; align-items: center; gap: 1rem;">
+                                    <p class="fileOwnerID notReallyWhite">Qmbq4tHNM3HWwJZX6rQihmF5CwcqxtZn66qc3Yd83XhES5</p>
+                                    <img src="./src/assets/images/user.png" alt="" class="fileOwnerIcon notReallyWhiteImage">
+                                </div>
+                            </div>
+                            <h1 class="regularText">8.45 Мб</h1>
+                            <h1 class="fileListStatus regularText">Публичный</h1>
+                            <h1 class="regularText">W9ux67E</h1>
+                            <img src="./src/assets/images/download-to-storage-drive.png" alt="" class="downloadIcon">
+                        </div>
+                        <div class="interLine"></div>
+                        <div class="fileListItem">
+                            <img src="./src/assets/images/videoType.png" alt="" class="iconSize">
+                            <div>
+                                <h1 class="regularText fileListName">cool video.mp4</h1>
+                                <div style="display: flex; align-items: center; gap: 1rem;">
+                                    <p class="fileOwnerID notReallyWhite">Qmbq4tHNM3HWwJZX6rQihmF5CwcqxtZn66qc3Yd83XhES5</p>
+                                    <img src="./src/assets/images/user.png" alt="" class="fileOwnerIcon notReallyWhiteImage">
+                                </div>
+                            </div>
+                            <h1 class="regularText">241.3 Мб</h1>
+                            <h1 class="fileListStatus regularText">Публичный</h1>
+                            <h1 class="regularText">Q98po1u</h1>
+                            <img src="./src/assets/images/download-to-storage-drive.png" alt="" class="downloadIcon">
+                        </div>
+                        <div class="interLine"></div>
+                    </div>
+                </div>
+            </div>
         </section>
     </main>
 <script src="./src/main.js" type="module"></script>

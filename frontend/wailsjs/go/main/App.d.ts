@@ -6,8 +6,10 @@ export function BuyFile(arg1:string,arg2:string):Promise<string>;
 
 export function GetFilesForSale():Promise<Array<main.RegisteredFile>>;
 
+export function GetMyFiles():Promise<Array<main.FileInfo>>;
+
 export function GetMyName():Promise<string>;
 
 export function Greet(arg1:string):Promise<string>;
 
-export function UploadFile():Promise<main.FileInfo>;
+export function UploadFile():Promise<void>;

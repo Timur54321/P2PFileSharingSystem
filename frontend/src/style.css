@@ -8,34 +8,334 @@ html {
     font-size: 62.5%;
 }
 
-.title {
-    font-size: 2.4rem;
-}
-
-.myFilesTitle {
-    margin-bottom: 5rem;
-}
-
 body {
-    background-color: white;
+    background-color: #1A1B20;
+    font-family: "Roboto Mono", monospace;
+}
+
+main {
+    display: grid;
+    grid-template-columns: 10fr 40fr;
+    height: 100vh;
+}
+
+.kindaWhite {
+    color: rgb(211, 211, 211)!important;
+}
+
+.notReallyWhite {
+    color: rgb(167, 167, 167)!important;
+}
+
+.smallTitle {
+    font-size: 1.8rem;
+}
+
+.regularText {
+    font-size: 1.4rem;
+    color: white;
+}
+
+.whiteImage {
+    filter: invert(100%) sepia(0%) saturate(0%) hue-rotate(214deg) brightness(104%) contrast(102%);
+}
+
+.notReallyWhiteImage {
+    filter: invert(70%) sepia(13%) saturate(17%) hue-rotate(315deg) brightness(91%) contrast(82%)
+}
+
+.iconSize {
+    width: 2.8rem;
+}
+
+/* //////////////////////////////////////////////////////////////////////////// */
+/* Left section  */
+/* //////////////////////////////////////////////////////////////////////////// */
+.leftSection {
+    border-right: solid 0.1rem #667;
+    position: relative;
+}
+
+.mainCorner {
+    height: 10rem;
+    border-bottom: solid 0.1rem #667;
+}
+
+.publicNodeBox, .filesMenuBox, .teamsMenuBox {
+    padding: 2rem;
+    border-bottom: solid 0.1rem #667;
+}
+
+.becomePublicNodeBtn {
+    width: 90%;
+    background: linear-gradient(90deg, #a975c9, #9accdf);
+    border-radius: 0.6rem;
+    display: flex;
+    align-items: center;
+    gap: 1.6rem;
+    padding: 0.6rem 1.6rem;
+    transition: box-shadow 0.2s;
+    cursor: pointer;
+}
+
+.publicNodeTitle {
+    margin-bottom: 0.8rem;
+}
+
+.becomePublicNodeBtn:hover {
+    box-shadow: 0 0 1rem 0.5rem #61c9bb34
+}
+
+.filesMenuTitle, .teamsMenuTitle {
+    margin-bottom: 1rem;
+}
+
+.fileMenuItem, .teamMenuItem {
+    display: flex;
+    align-items: center;
+    padding-left: 2rem;
+    gap: 1rem;
+    padding: 0.5rem;
+    cursor: pointer;
+}
+
+.fileMenuItem:hover p, .teamMenuItem:hover p {
+    margin-left: 2rem;
+    color: white!important;
+}
+
+.fileItemText, .teamName {
+    margin-left: 1rem; 
+    transition: margin-left 0.3s, color 0.3s;
+}
+
+.teamIcon {
+    width: 3rem;
+    height: 3rem;
+    background: linear-gradient(-45deg, #72c294, #f18d8d);
+    border-radius: 0.4rem;
+}
+
+.storageBox {
+    width: 100%;
+    position: absolute;
+    bottom: 0;
+    padding: 4rem 2.7rem;
+}
+
+.storageInfoBox {
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+}
+
+.storageProgressBox {
+    padding: 2rem 0rem;
+}
+
+.storageProgressBar {
+    height: 1.7rem;
+    background-color: #3d3d3d;
+    border-radius: 2rem;
+    overflow: hidden;
+}
+
+.storageProgress {
+    height: 100%;
+    width: 78%;
+    background: linear-gradient(-90deg, #fac4aa, #4145c5);
+    border-radius: 2rem;
+}
+
+/* ////////////////////////////////////////////////////////////////////////////// */
+/* Right section */
+/* ////////////////////////////////////////////////////////////////////////////// */
+.rightSection {
+}
+
+.topSection {
+    height: 10rem;
+    border-bottom: solid 0.1rem #667;
+    display: flex;
+    align-items: center;
+}
+
+.appNameBox {
+    width: 25rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.appName {
+    color: white;
+}
+
+.inputBox {
+    background-color: #232429;
+    width: 70rem;
+    display: flex;
+    gap: 2rem;
+    align-items: center;
+    padding: 1rem 2.3rem;
+    border-radius: 0.8rem;
+    border: solid 0.1rem #667;
+}
+
+.searchFileInput {
+    width: 50rem;
+    font-family: "Roboto Mono", monospace;
+    font-size: 1.4rem;
+    background: none;
+    border: none;
+    color: white;
+    transition: font-size 0.3s;
+}
+
+.searchFileInput:focus {
+    outline: none;
+    font-size: 1.8rem;
+}
+
+.userInfoBox {
+    margin-left: auto;
+    padding-right: 6rem;
+}
+
+.previewTeamsBox {
+    margin-bottom: 3rem;
+}
+
+.profileImageBox {
+    width: 5rem;
+    height: 5rem;
+    border-radius: 50%;
+    background-color: #4145c5;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    cursor: pointer;
+    transition: transform 0.4s;
+}
+
+.profileImage {
+    height: 100%;
+}
+
+.profileImageBox:hover {
+    transform: rotate(360deg);
+}
+
+.mainSection {
+    padding: 2rem 4rem;
+}
+
+.currentPageTitle {
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+}
+
+.optionsBox {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 3rem;
+}
+
+.optionButtons {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.optionBtn {
+    display: flex;
+    align-items: center;
+    background-color: #444444;
+    height: 4rem;
+    padding: 0 2.4rem;
+    border-radius: 0.6rem;
+    gap: 1rem;
+}
+
+.mainOption {
+    padding: 0 6.7rem;
+    background: linear-gradient(-90deg, #FF8F0D, #FF644D);
+}
+
+.teamListBox {
+    margin-top: 1.4rem;
+}
+
+.teamPreviewItem {
+    display: flex;
+    gap: 1.7rem;
+    background-color: #232429;
+    width: 35rem;
+    padding: 1.5rem 2rem;
+    border-radius: 0.9rem;
+}
+
+.teamPreviewIcon {
+    width: 4rem;
+    height: 4rem;
+    border-radius: 1rem;
+    background: linear-gradient(-45deg, #72c294, #f18d8d);
+}
+
+.teamListBox {
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+}
+
+.filesNavBox {
+    display: grid;
+    grid-template-columns: 3fr 52fr 12fr 14fr 14fr 3fr;
+    margin-top: 2rem;
+    padding-bottom: 1.7rem;
+    border-bottom: solid 0.1rem #667;
+}
+
+.fileNavItem {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.filesListBox {
+
+}
+
+.fileListItem {
+    display: grid;
+    grid-template-columns: 3fr 52fr 12fr 14fr 14fr 3fr;
+    padding: 1.5rem 0;
+}
+
+.fileOwnerID {
+    font-size: 1.2rem;
+}
+
+.fileOwnerIcon {
+    width: 1.8rem;
+}
+
+.fileListName {
     font-size: 1.6rem;
 }
 
-.files_box {
-    width: 120rem;
-    margin: auto;
-    margin-top: 10rem;
+.fileListStatus {
+    color: #4DAE5C;
 }
 
-.file_block {
-    width: 100%;
-    display: flex;
-    justify-content: space-between;
-    border: 1px solid;
-    padding: 2rem;
+.downloadIcon {
+    width: 2.2rem;
 }
 
-.initials {
-    margin-bottom: 10rem;
+.interLine {
+    width: 30%;
+    border-bottom: solid 0.1rem #667;
 }
 

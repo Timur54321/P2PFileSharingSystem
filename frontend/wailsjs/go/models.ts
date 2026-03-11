@@ -1,6 +1,7 @@
 export namespace main {
 	
 	export class FileInfo {
+	    fileID: string;
 	    filename: string;
 	    size: number;
 	    sizeFormatted: string;
@@ -12,6 +13,7 @@ export namespace main {
 	
 	    constructor(source: any = {}) {
 	        if ('string' === typeof source) source = JSON.parse(source);
+	        this.fileID = source["fileID"];
 	        this.filename = source["filename"];
 	        this.size = source["size"];
 	        this.sizeFormatted = source["sizeFormatted"];

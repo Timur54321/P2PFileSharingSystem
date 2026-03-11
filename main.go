@@ -36,7 +36,7 @@ const BuyFileProtocolID = "/buyFile/1.0.0"
 const transmitProtocolID = "/transmitFile"
 
 var stablePeerId *peer.AddrInfo
-var mySale FileInfo
+var mySales []FileInfo
 
 type RegisteredFile struct {
 	ID            string `json:"fileID"`
@@ -47,6 +47,7 @@ type RegisteredFile struct {
 }
 
 type FileInfo struct {
+	ID            string `json:"fileID"`
 	Name          string `json:"filename"`
 	Size          int64  `json:"size"`
 	SizeFormatted string `json:"sizeFormatted"`
@@ -167,7 +168,7 @@ func main() {
 	initGui(h)
 }
 
-func (a *App) UploadFile() (*FileInfo, error) {
+func (a *App) UploadFile() error {
 	filePath, err := runtime.OpenFileDialog(a.ctx, runtime.OpenDialogOptions{
 		Title: "Выберите файл для загрузки",
 		Filters: []runtime.FileFilter{
@@ -187,11 +188,11 @@ func (a *App) UploadFile() (*FileInfo, error) {
 	})
 
 	if err != nil {
-		return nil, err
+		return err
 	}
 
 	if filePath == "" {
-		return nil, nil
+		return nil
 	}
 
 	fileInfo, err := os.Stat(filePath)
@@ -214,7 +215,7 @@ func (a *App) UploadFile() (*FileInfo, error) {
 	s, err := a.host.NewStream(context.Background(), stablePeerId.ID, RegisterFileProtocolID)
 	if err != nil {
 		log.Println(err)
-		return nil, err
+		return err
 	}
 	defer s.Close()
 
@@ -230,14 +231,19 @@ func (a *App) UploadFile() (*FileInfo, error) {
 
 	go writeFileStream(a.host, fileId, absPath)
 
-	mySale = FileInfo{
+	mySales = append(mySales, FileInfo{
+		ID:            fileId,
 		Name:          fileInfo.Name(),
 		Size:          fileInfo.Size(),
 		SizeFormatted: formatFileSize(fileInfo.Size()),
 		Path:          absPath,
-	}
+	})
 
-	return &mySale, nil
+	return nil
+}
+
+func (a *App) GetMyFiles() []FileInfo {
+	return mySales
 }
 
 func (a *App) GetFilesForSale() ([]RegisteredFile, error) {

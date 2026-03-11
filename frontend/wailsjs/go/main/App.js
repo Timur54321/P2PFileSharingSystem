@@ -10,6 +10,10 @@ export function GetFilesForSale() {
   return window['go']['main']['App']['GetFilesForSale']();
 }
 
+export function GetMyFiles() {
+  return window['go']['main']['App']['GetMyFiles']();
+}
+
 export function GetMyName() {
   return window['go']['main']['App']['GetMyName']();
 }
