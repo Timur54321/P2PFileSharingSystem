@@ -317,11 +317,27 @@ func (a *App) BuyFile(ownerID, fileID string) string {
 		return "error"
 	}
 
-	_, err = io.CopyN(out, reader, filesize)
-	if err != nil {
-		fmt.Println("Ошибка при получения файла: ", err)
-		out.Close()
-		return "error"
+	buffer := make([]byte, 32*1024)
+	var received int64 = 0
+
+	for received < filesize {
+		remaining := filesize - received
+		if int64(len(buffer)) > remaining {
+			buffer = buffer[:remaining]
+		}
+
+		n, err := reader.Read(buffer)
+		if err != nil {
+			fmt.Println("Ошибка чтения: ", err)
+			return "error"
+		}
+
+		out.Write(buffer[:n])
+		received += int64(n)
+
+		progress := float64(received) / float64(filesize) * 100
+
+		runtime.EventsEmit(a.ctx, "download_progress", progress)
 	}
 
 	out.Close()

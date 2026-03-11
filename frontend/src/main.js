@@ -1,10 +1,13 @@
 import './style.css';
 import './app.css';
 
+window.runtime.EventsOn("download_progress", progress => {
+    const bar = document.querySelector("#progress");
+    bar.style.width = progress+"%";
+});
+
 const initClient = async function() {
-    console.log("nigger")
     document.querySelector("#createFile").addEventListener("click", async () => {
-        console.log("duh")
         const fileInfo = await window.go.main.App.UploadFile();
         alert("fileUplaoded")
     });
